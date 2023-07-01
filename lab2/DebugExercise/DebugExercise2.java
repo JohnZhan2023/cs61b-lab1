@@ -15,6 +15,12 @@ public class DebugExercise2 {
         int max = b & w | a & z;
         return max;
     }
+    public static int max1(int a,int b){
+        if(a>b)
+            return a;
+        else
+            return b;
+    }
 
 
     /** Returns the sum of a and b. Do not step into this function. */
@@ -34,6 +40,9 @@ public class DebugExercise2 {
         }
         return xor;
     }
+    public static int add1(int a,int b){
+        return b;
+    }
 
     /** Returns a new array where entry i is the max of
      * a[i] and b[i]. For example, if a = {1, -10, 3}
@@ -46,7 +55,7 @@ public class DebugExercise2 {
         }
         int[] returnArray = new int[a.length];
         for (int i = 0; i < a.length; i += 1) {
-            int biggerValue = max(a[i], b[i]);
+            int biggerValue = max1(a[i], b[i]);
             returnArray[i] = biggerValue;
         }
 
@@ -58,7 +67,7 @@ public class DebugExercise2 {
         int i = 0;
         int sum = 0;
         while (i < x.length) {
-            sum = sum + add(sum, x[i]);
+            sum = sum + add1(sum, x[i]);
             i = i + 1;
         }
         return sum;
