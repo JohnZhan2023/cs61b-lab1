@@ -107,29 +107,215 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
+        board.setViewingPerspective(side);
         boolean changed;
+        boolean scorebool;
         changed = false;
-        for(int col=0;col<this.size();col=col+1) {
-            Tile[] tepo = {null, null, null, null};
-            int r1 = this.size() - 1;
-            for (int r = this.size() - 1; r >= 0; r = r - 1)
-                if (this.board.tile(col, r) != null) {
-                    tepo[r1] = this.board.tile(col, r);
-                    r1=r1-1;
-                }
-            for(int i=this.size();i>0;i=i-1) {
-                if (this.board.tile(col, i) == null)
-                    break;
-                if(this.board.tile(col,i).value()==this.board.tile(col,i-1).value()) {
-                    this.board.tile(col,i).merge()
-                }
-            }
+        boolean nodoumer=true;
 
+        for(int col=0;col<this.size();col=col+1) {
+            /**大循环*/
+            nodoumer=true;
+            if ((board.tile(col, 3) != null && board.tile(col, 2) != null && board.tile(col, 1) != null && board.tile(col, 0) != null) && board.tile(col, 3).value() == board.tile(col, 2).value() && board.tile(col, 0).value() == board.tile(col, 1).value()) {
+                board.move(col, 3, board.tile(col, 2));
+                board.move(col, 2, board.tile(col, 1));
+                board.move(col, 2, board.tile(col, 0));
+                score+=board.tile(col,3).value()+board.tile(col,2).value();
+                changed=true;
+            } else {
+                if (this.board.tile(col, 2) == null) {
+                    if (this.board.tile(col, 1) == null) {
+                        if (this.board.tile(col, 0) == null) {
+                        } else {
+                            if (this.board.tile(col, 3) == null||(this.board.tile(col, 0).value() == this.board.tile(col, 3).value() && nodoumer) ) {
+                                changed = true;
+                                if (this.board.move(col, 3, this.board.tile(col, 0))) {
+                                    this.score += this.board.tile(col, 3).value();
+                                    nodoumer = false;
+                                }
+                            } else {
+                                changed = true;
+                                if (this.board.move(col, 2, this.board.tile(col, 0))) {
+                                    this.score += this.board.tile(col, 2).value();
+                                    nodoumer = false;
+                                }
+                            }
+                        }
+                    } else {
+                        if ( this.board.tile(col, 3) == null||(this.board.tile(col, 1).value() == this.board.tile(col, 3).value() && nodoumer) ) {
+                            changed = true;
+                            if (this.board.move(col, 3, this.board.tile(col, 1))) {
+                                this.score += this.board.tile(col, 3).value();
+                                nodoumer = false;
+                            }
+                            if (this.board.tile(col, 0) == null) {
+                            } else {
+                                if (this.board.tile(col, 0).value() == this.board.tile(col, 3).value() && nodoumer) {
+                                    changed = true;
+                                    if (this.board.move(col, 3, this.board.tile(col, 0)) && nodoumer) {
+                                        this.score += this.board.tile(col, 3).value();
+                                        nodoumer = false;
+                                    }
+                                } else {
+                                    changed = true;
+                                    if (this.board.move(col, 2, this.board.tile(col, 0))) {
+                                        this.score += this.board.tile(col, 2).value();
+                                        nodoumer = false;
+                                    }
+                                }
+                            }
+                        } else {
+                            changed = true;
+                            if (this.board.move(col, 2, this.board.tile(col, 1))) {
+                                this.score += this.board.tile(col, 2).value();
+                                nodoumer = false;
+                            }
+                            if (this.board.tile(col, 0) == null) {
+                            } else {
+                                if (this.board.tile(col, 0).value() == this.board.tile(col, 2).value() && nodoumer) {
+                                    changed = true;
+                                    if (this.board.move(col, 2, this.board.tile(col, 0))) {
+                                        this.score += this.board.tile(col, 2).value();
+                                        nodoumer = false;
+                                    }
+                                } else {
+                                    changed = true;
+                                    if (this.board.move(col, 1, this.board.tile(col, 0))) {
+                                        this.score += this.board.tile(col, 1).value();
+                                        nodoumer = false;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+
+                } else {
+                    if (this.board.tile(col, 3) == null || (this.board.tile(col, 3).value() == this.board.tile(col, 2).value() && nodoumer)) {
+                        changed = true;
+                        if (this.board.move(col, 3, this.board.tile(col, 2))) {
+                            this.score += this.board.tile(col, 3).value();
+                            nodoumer = false;
+                        }
+                        if (this.board.tile(col, 1) == null) {
+                            if (this.board.tile(col, 0) == null) {
+                            } else {
+                                if ((this.board.tile(col, 0).value() == this.board.tile(col, 3).value()) && nodoumer) {
+                                    changed = true;
+                                    if (this.board.move(col, 3, this.board.tile(col, 0))) {
+                                        this.score += this.board.tile(col, 3).value();
+                                        nodoumer = false;
+                                    }
+                                } else {
+                                    changed = true;
+                                    if (this.board.move(col, 2, this.board.tile(col, 0))) {
+                                        this.score += this.board.tile(col, 2).value();
+                                        nodoumer = false;
+                                    }
+                                }
+                            }
+                        } else {
+                            if (this.board.tile(col, 1).value() == this.board.tile(col, 3).value() && nodoumer) {
+                               changed = true;
+                                if (this.board.move(col, 3, this.board.tile(col, 1))) {
+                                    this.score += this.board.tile(col, 3).value();
+                                    nodoumer = false;
+                                }
+                                if (this.board.tile(col, 0) == null) {
+                                } else {
+                                    changed = true;
+                                    if (this.board.tile(col, 0) == this.board.tile(col, 3) && nodoumer) {
+                                        changed = true;
+                                        if (this.board.move(col, 3, this.board.tile(col, 0))) {
+                                            this.score += this.board.tile(col, 3).value();
+                                            nodoumer = false;
+                                        }
+                                    } else {
+                                        changed = true;
+                                        if (this.board.move(col, 2, this.board.tile(col, 0))) {
+                                            this.score += this.board.tile(col, 2).value();
+                                            nodoumer = false;
+                                        }
+                                    }
+                                }
+                              /**board.move(col,2,board.tile(col,1));
+                              changed=true;
+                              if(board.tile(col,0)!=null)board.move(col,1,board.tile(col,0));*/
+                            } else {
+                                changed = true;
+                                if (this.board.move(col, 2, this.board.tile(col, 1))) {
+                                    this.score += this.board.tile(col, 2).value();
+                                    nodoumer = false;
+                                }
+                                if (this.board.tile(col, 0) == null) {
+                                } else {
+                                    if (this.board.tile(col, 0) == this.board.tile(col, 2) && nodoumer) {
+                                        changed = true;
+                                        if (this.board.move(col, 2, this.board.tile(col, 0))) {
+                                            this.score += this.board.tile(col, 2).value();
+                                            nodoumer = false;
+                                        }
+                                    } else {
+                                        changed = true;
+                                        if (this.board.move(col, 1, this.board.tile(col, 0))) {
+                                            this.score += this.board.tile(col, 1).value();
+                                            nodoumer = false;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    else{
+                        if(board.tile(col,1)==null){
+                            if(board.tile(col,0)==null){}
+                            else{
+                                if(board.tile(col,0).value()==board.tile(col,2).value()&&nodoumer){
+                                    changed = true;
+                                    if (this.board.move(col, 2, this.board.tile(col, 1))) {
+                                        this.score += this.board.tile(col, 2).value();
+                                        nodoumer = false;
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            if(board.tile(col,1).value()==board.tile(col,2).value()&&nodoumer) {
+                                changed = true;
+                                if (this.board.move(col, 2, this.board.tile(col, 1))) {
+                                    this.score += this.board.tile(col, 2).value();
+                                    nodoumer = false;
+                                }
+                                if(board.tile(col,0)==null){}else{
+                                    board.move(col,1,board.tile(col,0));
+                                }
+
+                            }else if(board.tile(col,0)==null){}else{
+                                if(board.tile(col,0).value()==board.tile(col,1).value()&&nodoumer){
+                                    changed = true;
+                                    if (this.board.move(col, 1, this.board.tile(col, 0))) {
+                                        this.score += this.board.tile(col, 1).value();
+                                        nodoumer = false;
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
         }
+
+
+
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
