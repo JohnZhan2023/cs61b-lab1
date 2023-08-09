@@ -56,12 +56,16 @@ public class ArrayDeque<T> {
     }
     public T removeFirst(){
         first_idx++;
+        T temp=array[first_idx-1];
         if_resize();
+        return temp;
 
     }
     public T removeLast(){
+        T temp=array[out_idx-1];
         out_idx--;
         if_resize();
+        return temp;
     }
     public T get(int index){
         return array[first_idx+index];
